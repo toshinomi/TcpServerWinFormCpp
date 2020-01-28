@@ -30,6 +30,8 @@ void FormMain::OnBtnClickStart(Object^ sender, EventArgs^ e)
     ThreadStart^ start = gcnew ThreadStart(this, &FormMain::DataListener);
     m_thread = gcnew Thread(start);
     m_thread->Start();
+
+    return;
 }
 
 /// <summary>
