@@ -2,6 +2,9 @@
 
 using namespace TcpServerWinFormCpp;
 
+/// <summary>
+/// 初期化
+/// </summary>
 void FormMain::Init(void)
 {
     m_thread = nullptr;
@@ -14,6 +17,11 @@ void FormMain::Init(void)
     textBoxPort->Text = m_nPort.ToString();
 }
 
+/// <summary>
+/// スタートボタンのクリックイベント
+/// </summary>
+/// <param name="sender">オブジェクト</param>
+/// <param name="e">イベントのデータ</param>
 void FormMain::OnBtnClickStart(Object^ sender, EventArgs^ e)
 {
     m_strIpAddress = textBoxIpAddress->Text->ToString();
@@ -24,22 +32,65 @@ void FormMain::OnBtnClickStart(Object^ sender, EventArgs^ e)
     m_thread->Start();
 }
 
+/// <summary>
+/// データリスナー
+/// </summary>
 void FormMain::DataListener()
 {
+    try
+    {
+        m_tcpListener = gcnew TcpListener(IPAddress::Parse(m_strIpAddress), m_nPort);
+        m_tcpListener->Start();
+    }
+    catch (Exception^)
+    {
+
+    }
 }
 
+/// <summary>
+/// ステータス表示のテキストボックス設定
+/// </summary>
+/// <param name="_strText">表示文字列</param>
 void FormMain::SetTextStatus(String^ _strText)
 {
+    textBoxStatus->Text = _strText->ToString();
+
+    return;
 }
 
+/// <summary>
+/// データ受信表示のテキストボックス設定
+/// </summary>
+/// <param name="_strText">表示文字列</param>
 void FormMain::SetTextRcvData(String^ _strText)
 {
+    textBoxRcvData->Text = _strText->ToString() + "\n";
+
+    return;
 }
 
+/// <summary>
+/// クリアボタンのクリックイベント
+/// </summary>
+/// <param name="sender">オブジェクト</param>
+/// <param name="e">イベントのデータ</param>
 void FormMain::OnBtnClickClear(Object^ sender, EventArgs^ e)
 {
+    textBoxRcvData->Text = "";
+
+    return;
 }
 
+/// <summary>
+/// ストップボタンのクリックイベント
+/// </summary>
+/// <param name="sender">オブジェクト</param>
+/// <param name="e">イベントのデータ</param>
 void FormMain::OnBtnClickStop(Object^ sender, EventArgs^ e)
 {
+    m_bEnd = true;
+    m_tcpListener->Stop();
+
+    return;
 }
